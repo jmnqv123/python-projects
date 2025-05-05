@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head><title>Sentiment Checker</title></head>
+<head>
+  <title>My Portfolio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 <body>
-  <h1>Is your tweet positive or negative?</h1>
-  <form method="POST">
-    <textarea name="tweet" rows="4" cols="50"></textarea><br>
-    <button type="submit">Check Sentiment</button>
-  </form>
-  <h2>{{ prediction }}</h2>
+  <h1>Hello, I'm Your Name</h1>
+  <p>This is my portfolio site!</p>
+
+  <h2>Projects</h2>
+  <ul>
+    <li>✅ Sentiment Analyzer Web App</li>
+    <li>📈 Stock Trading Bot</li>
+    <li>💬 Real-Time Chat App</li>
+  </ul>
 </body>
 </html>
