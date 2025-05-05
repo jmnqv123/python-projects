@@ -1,18 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Portfolio</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Messaging System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .messages {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            height: 300px;
+            overflow-y: scroll;
+            border-bottom: 1px solid #ddd;
+        }
+        .messages li {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Hello, I'm Your Name</h1>
-  <p>This is my portfolio site!</p>
+    <div class="chat-container">
+        <h2>Chat Room</h2>
+        <ul id="messages" class="messages"></ul>
+        <input id="messageInput" placeholder="Type your message..." autocomplete="off">
+        <button id="sendButton">Send</button>
+    </div>
 
-  <h2>Projects</h2>
-  <ul>
-    <li>✅ Sentiment Analyzer Web App</li>
-    <li>📈 Stock Trading Bot</li>
-    <li>💬 Real-Time Chat App</li>
-  </ul>
+    <!-- Include Socket.IO client -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+        var socket = io.connect('http://127.0.0.1:5000');  // Connect to server
+
+        // Get references to DOM elements
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const messages = document.getElementById('messages');
+
+        // Handle incoming messages
+        socket.on('message', function(msg) {
+            let messageElement = document.createElement('li');
+            messageElement.textContent = msg;
+            messages.appendChild(messageElement);
+            messages.scrollTop = messages.scrollHeight;  // Scroll to the bottom
+        });
+
+        // Send message on button click or Enter key press
+        sendButton.addEventListener('click', function() {
+            let message = messageInput.value.trim();
+            if (message) {
+                socket.send(message);  // Send message to server
+                messageInput.value = '';  // Clear input field
+            }
+        });
+
+        messageInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+    </script>
 </body>
 </html>
